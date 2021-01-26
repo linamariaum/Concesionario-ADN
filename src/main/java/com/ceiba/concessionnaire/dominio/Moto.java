@@ -9,6 +9,9 @@ public class Moto {
     private int precio;
 
     public Moto(String placa, String marca, String modelo, String color, int precio) {
+
+        //
+
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;

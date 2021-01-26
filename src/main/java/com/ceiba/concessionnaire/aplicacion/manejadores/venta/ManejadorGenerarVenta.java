@@ -1,21 +1,20 @@
 package com.ceiba.concessionnaire.aplicacion.manejadores.venta;
 
-import com.ceiba.concessionnaire.dominio.Venta;
-import com.ceiba.concessionnaire.dominio.servicio.venta.ServicioCrearVenta;
+import com.ceiba.concessionnaire.dominio.servicio.asesor.ServicioAsesor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ManejadorGenerarVenta {
 
-    private final ServicioCrearVenta servicioCrearVenta;
+    private final ServicioAsesor servicioAsesor;
 
-    public ManejadorGenerarVenta(ServicioCrearVenta servicioCrearVenta) {
-        this.servicioCrearVenta = servicioCrearVenta;
+    public ManejadorGenerarVenta(ServicioAsesor servicioAsesor) {
+        this.servicioAsesor = servicioAsesor;
     }
 
     @Transactional
-    public void ejecutar(Venta venta) {
-        this.servicioCrearVenta.ejecutar(venta);
+    public void ejecutar(String placa, String cedulaCliente) {
+        this.servicioAsesor.vender(placa, cedulaCliente);
     }
 }

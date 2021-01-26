@@ -2,8 +2,9 @@ package com.ceiba.concessionnaire.dominio.servicio.moto;
 
 import com.ceiba.concessionnaire.dominio.Moto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
-import com.ceiba.concessionnaire.infraestructura.persistencia.repositorio.RepositorioMotoPersistente;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class ServicioObtenerMoto {
@@ -14,7 +15,7 @@ public class ServicioObtenerMoto {
         this.repositorioMoto = repositorioMoto;
     }
 
-    public Moto ejecutar(String placa) {
+    public Optional<Moto> ejecutar(String placa) {
         return this.repositorioMoto.obtenerPorPlaca(placa);
     }
 }
