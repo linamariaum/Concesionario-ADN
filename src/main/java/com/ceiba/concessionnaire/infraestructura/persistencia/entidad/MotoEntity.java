@@ -25,8 +25,15 @@ public class MotoEntity {
     @Column(nullable = false)
     private Integer precio;
 
-    public MotoEntity() {
+    public MotoEntity(String placa, String marca, String modelo, String color, Integer precio) {
+        this.placa = placa;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.color = color;
+        this.precio = precio;
     }
+
+    public MotoEntity() {}
 
     public Long getId() {
         return id;

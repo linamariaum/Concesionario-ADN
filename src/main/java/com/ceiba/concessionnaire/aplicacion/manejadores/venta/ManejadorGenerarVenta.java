@@ -1,5 +1,6 @@
 package com.ceiba.concessionnaire.aplicacion.manejadores.venta;
 
+import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.dominio.servicio.asesor.ServicioAsesor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ public class ManejadorGenerarVenta {
     }
 
     @Transactional
-    public void ejecutar(String placa, String cedulaCliente) {
-        this.servicioAsesor.vender(placa, cedulaCliente);
+    public Venta ejecutar(String placa, String cedulaCliente) {
+        return this.servicioAsesor.vender(placa, cedulaCliente);
     }
 }

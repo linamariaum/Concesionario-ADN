@@ -1,8 +1,6 @@
 package com.ceiba.concessionnaire.dominio.servicio.venta;
 
-import com.ceiba.concessionnaire.dominio.Moto;
-import com.ceiba.concessionnaire.dominio.Venta;
-import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
+import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 
 public class ServicioCrearVenta {

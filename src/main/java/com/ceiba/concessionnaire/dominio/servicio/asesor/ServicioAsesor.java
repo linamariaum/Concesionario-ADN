@@ -1,14 +1,13 @@
 package com.ceiba.concessionnaire.dominio.servicio.asesor;
 
-import com.ceiba.concessionnaire.dominio.Moto;
-import com.ceiba.concessionnaire.dominio.Venta;
-import com.ceiba.concessionnaire.dominio.exception.BadRequestException;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
+import com.ceiba.concessionnaire.dominio.dto.Venta;
+import com.ceiba.concessionnaire.dominio.exception.BadDataException;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 
 public class ServicioAsesor {
 
@@ -25,25 +24,36 @@ public class ServicioAsesor {
         this.repositorioMoto = repositorioMoto;
     }
 
-    public void vender(String placa, String cedulaCliente) {
+    public Venta vender(String placa, String cedulaCliente) {
+        Date fechaActual = new Date();
+        //
+        this.diaHabil(fechaActual);
 
+        // Validar compras anteriores
 
-        Optional<Moto> motoOptional  = this.repositorioMoto.obtenerPorPlaca(placa);
-        if (motoOptional.isPresent()) {
-            Moto moto = motoOptional.get();
-            Date fechaActual = new Date();
-            Date fechaEntrega = this.fechaDeEntrega(fechaActual);
+        Moto moto  = this.repositorioMoto.obtenerPorPlaca(placa);
+        if (true) {
+
+            Date fechaEntrega = this.calcularEntrega(fechaActual);
             if (incremento) {
                 int valorIncremento = ((INCREMENTO_PRECIO*moto.getPrecio())/100);
                 moto.setPrecio( valorIncremento + moto.getPrecio());
             }
             Venta venta = new Venta(fechaActual, moto, cedulaCliente, fechaEntrega);
-            this.repositorioVenta.crear(venta);
+            return this.repositorioVenta.crear(venta);
         }
         throw new UnsupportedOperationException("No se encuentra disponible la moto ingresada");
     }
 
-    public Date fechaDeEntrega(Date fechaActual) {
+    private void diaHabil(Date fecha) {
+        Calendar fechaActual = Calendar.getInstance();
+        fechaActual.setTime(fecha);
+        if (fechaActual.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            throw new BadDataException("El día de hoy no se realizan ventas.");
+        }
+    }
+
+    private Date calcularEntrega(Date fechaActual) {
         Calendar fechaEntrega = Calendar.getInstance();
         fechaEntrega.setTime(fechaActual);
         int dias;

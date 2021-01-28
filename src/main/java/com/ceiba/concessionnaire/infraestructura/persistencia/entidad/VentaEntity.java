@@ -3,10 +3,9 @@ package com.ceiba.concessionnaire.infraestructura.persistencia.entidad;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity(name = "Venta")
-@NamedQuery(name = "Venta.findByCedulaCliente", query = "SELECT venta FROM Venta venta WHERE venta.cedulaCliente = :cedulaCliente")
 public class VentaEntity {
 
     @Id
@@ -17,11 +16,23 @@ public class VentaEntity {
     private String cedulaCliente;
 
     @CreationTimestamp
-    private LocalDateTime fecha;
+    private Date fecha;
+
+    @Column(nullable = false)
+    private Date fechaEntrega;
 
     @ManyToOne
     @JoinColumn(name = "ID_MOTO", referencedColumnName = "id")
     private MotoEntity moto;
+
+    public VentaEntity(String cedulaCliente, Date fecha, Date fechaEntrega, MotoEntity moto) {
+        this.cedulaCliente = cedulaCliente;
+        this.fecha = fecha;
+        this.fechaEntrega = fechaEntrega;
+        this.moto = moto;
+    }
+
+    public VentaEntity() {}
 
     public Long getId() {
         return id;
@@ -39,11 +50,11 @@ public class VentaEntity {
         this.cedulaCliente = cedulaCliente;
     }
 
-    public LocalDateTime getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -51,7 +62,15 @@ public class VentaEntity {
         return moto;
     }
 
-    //public void setMoto(MotoEntity moto) {
-       // this.moto = moto;
-   // }
+    public void setMoto(MotoEntity moto) {
+        this.moto = moto;
+    }
+
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
 }

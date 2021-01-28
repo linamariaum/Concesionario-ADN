@@ -1,7 +1,6 @@
 package com.ceiba.concessionnaire.dominio.servicio.venta;
 
-import com.ceiba.concessionnaire.dominio.Moto;
-import com.ceiba.concessionnaire.dominio.Venta;
+import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 
 import java.util.List;
@@ -14,8 +13,9 @@ public class ServicioObtenerVentas {
         this.repositorioVenta = repositorioVenta;
     }
 
-    public List<Venta> ejecutar(String cedula) {
-        return this.repositorioVenta.obtenerVentasPorCedulaCliente(cedula);
+    public List<Venta> ejecutar() {
+        return this.repositorioVenta.obtenerVentas();
+        //return this.repositorioVenta.obtenerVentasPorCedulaCliente(cedula);
     }
 
 }

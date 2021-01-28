@@ -1,4 +1,6 @@
-package com.ceiba.concessionnaire.dominio;
+package com.ceiba.concessionnaire.dominio.dto;
+
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 
 import java.util.Date;
 

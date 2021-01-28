@@ -5,16 +5,17 @@ import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ServicioCrearMoto {
+public class ServicioActualizarMoto {
 
     private final RepositorioMoto repositorioMoto;
 
-    public ServicioCrearMoto(RepositorioMoto repositorioMoto) {
+    public ServicioActualizarMoto(RepositorioMoto repositorioMoto) {
         this.repositorioMoto = repositorioMoto;
     }
 
-    public void ejecutar(Moto moto) {
-        this.repositorioMoto.agregar(moto);
+    public Moto ejecutar(int id, Moto moto) {
+        return this.repositorioMoto.actualizar(id, moto);
     }
 
 }
+

@@ -1,12 +1,12 @@
 package com.ceiba.concessionnaire.infraestructura.persistencia.builder;
 
-import com.ceiba.concessionnaire.dominio.Moto;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.infraestructura.persistencia.entidad.MotoEntity;
-
 
 public final class MotoBuilder {
 
-    public MotoBuilder() {
+    private MotoBuilder() {
+        throw new IllegalStateException("Clase de traducción");
     }
 
     public static Moto convertirADominio(MotoEntity motoEntity) {
@@ -18,7 +18,7 @@ public final class MotoBuilder {
     }
 
     public static MotoEntity convertirAEntity(Moto moto) {
-        MotoEntity motoEntity = new MotoEntity();
+        MotoEntity motoEntity = new MotoEntity(moto.getPlaca(), moto.getMarca(), moto.getModelo(), moto.getColor(), moto.getPrecio());
         motoEntity.setPlaca(moto.getPlaca());
         motoEntity.setMarca(moto.getMarca());
         motoEntity.setModelo(moto.getModelo());

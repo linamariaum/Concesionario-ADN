@@ -1,6 +1,6 @@
 package com.ceiba.concessionnaire.aplicacion.manejadores.venta;
 
-import com.ceiba.concessionnaire.dominio.Venta;
+import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.dominio.servicio.venta.ServicioObtenerVentas;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,8 @@ public class ManejadorObtenerVentas {
         this.servicioObtenerVentas = servicioObtenerVentas;
     }
 
-    public List<Venta> ejecutar(String cedulaCliente) {
-        return this.servicioObtenerVentas.ejecutar(cedulaCliente);
+    public List<Venta> ejecutar() {
+        return this.servicioObtenerVentas.ejecutar();
+        //return this.servicioObtenerVentas.ejecutar(cedulaCliente);
     }
 }

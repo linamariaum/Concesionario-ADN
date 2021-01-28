@@ -1,9 +1,8 @@
 package com.ceiba.concessionnaire.dominio.repositorio;
 
-import com.ceiba.concessionnaire.dominio.Moto;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RepositorioMoto {
 
@@ -20,7 +19,7 @@ public interface RepositorioMoto {
      * @param placa
      * @return Moto
      */
-    Optional<Moto> obtenerPorPlaca(String placa);
+    Moto obtenerPorPlaca(String placa);
 
     /**
      * Permite agregar una moto al repositorio
@@ -28,5 +27,14 @@ public interface RepositorioMoto {
      * @param moto
      */
     void agregar(Moto moto);
+
+    /**
+     * Permite obtener una moto dada una placa
+     *
+     * @param id
+     * @param moto
+     * @return Moto
+     */
+    Moto actualizar(int id, Moto moto);
 
 }

@@ -1,6 +1,6 @@
 package com.ceiba.concessionnaire.dominio.servicio.moto;
 
-import com.ceiba.concessionnaire.dominio.Moto;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
 
 import java.util.List;

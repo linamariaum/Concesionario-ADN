@@ -1,6 +1,6 @@
 package com.ceiba.concessionnaire.aplicacion.manejadores.moto;
 
-import com.ceiba.concessionnaire.dominio.Moto;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.dominio.servicio.moto.ServicioObtenerMoto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,12 +1,11 @@
 package com.ceiba.concessionnaire.infraestructura.controlador;
 
-import com.ceiba.concessionnaire.aplicacion.manejadores.moto.ManejadorObtenerMoto;
 import com.ceiba.concessionnaire.aplicacion.manejadores.venta.ManejadorGenerarVenta;
 import com.ceiba.concessionnaire.aplicacion.manejadores.venta.ManejadorObtenerVentas;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ceiba.concessionnaire.dominio.dto.Venta;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ventas")
@@ -21,8 +20,13 @@ public class ControladorVenta {
     }
 
     @PostMapping("/{placa}/{cedulaCliente}")
-    public void vender(@PathVariable(name = "placa") String placa,
+    public Venta vender(@PathVariable(name = "placa") String placa,
                         @PathVariable(name = "cedulaCliente") String cedulaCliente) {
-        this.manejadorGenerarVenta.ejecutar(placa, cedulaCliente);
+        return this.manejadorGenerarVenta.ejecutar(placa, cedulaCliente);
+    }
+
+    @GetMapping
+    public List<Venta> buscarVentas() {
+        return this.manejadorObtenerVentas.ejecutar();
     }
 }
