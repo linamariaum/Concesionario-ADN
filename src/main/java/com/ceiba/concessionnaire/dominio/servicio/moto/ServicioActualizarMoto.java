@@ -13,9 +13,7 @@ public class ServicioActualizarMoto {
         this.repositorioMoto = repositorioMoto;
     }
 
-    public Moto ejecutar(int id, Moto moto) {
-        return this.repositorioMoto.actualizar(id, moto);
-    }
+    public Moto ejecutar(String placa, Moto moto) { return this.repositorioMoto.actualizar(placa, moto); }
 
 }
 

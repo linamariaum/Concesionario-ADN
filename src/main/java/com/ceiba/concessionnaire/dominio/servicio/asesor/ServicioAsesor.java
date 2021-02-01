@@ -6,8 +6,11 @@ import com.ceiba.concessionnaire.dominio.exception.BadDataException;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ServicioAsesor {
 
@@ -17,6 +20,7 @@ public class ServicioAsesor {
     public static final int DIAS_ENTREGA_SEMANA = 3;
     public static final int DIAS_ENTREGA_FIN_DE_SEMANA = 6;
     public static final int INCREMENTO_PRECIO = 5;
+    public static final int PLAZO_DIAS = 10;
     private boolean incremento;
 
     public ServicioAsesor(RepositorioVenta repositorioVenta, RepositorioMoto repositorioMoto) {
@@ -26,14 +30,14 @@ public class ServicioAsesor {
 
     public Venta vender(String placa, String cedulaCliente) {
         Date fechaActual = new Date();
-        //
+        // Validar concesionario abierto
         this.diaHabil(fechaActual);
 
-        // Validar compras anteriores
+        // Validar plazo minimo de dompras anteriores
+        this.validarComprasAnteriores(cedulaCliente);
 
         Moto moto  = this.repositorioMoto.obtenerPorPlaca(placa);
-        if (true) {
-
+        if (moto != null) {
             Date fechaEntrega = this.calcularEntrega(fechaActual);
             if (incremento) {
                 int valorIncremento = ((INCREMENTO_PRECIO*moto.getPrecio())/100);
@@ -42,7 +46,7 @@ public class ServicioAsesor {
             Venta venta = new Venta(fechaActual, moto, cedulaCliente, fechaEntrega);
             return this.repositorioVenta.crear(venta);
         }
-        throw new UnsupportedOperationException("No se encuentra disponible la moto ingresada");
+        throw new UnsupportedOperationException("No se encuentra la moto ingresada");
     }
 
     private void diaHabil(Date fecha) {
@@ -50,6 +54,18 @@ public class ServicioAsesor {
         fechaActual.setTime(fecha);
         if (fechaActual.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
             throw new BadDataException("El día de hoy no se realizan ventas.");
+        }
+    }
+
+    private void validarComprasAnteriores(String cedulaCliente) {
+        List<Venta> ventas = this.repositorioVenta.obtenerVentasPorCedulaCliente(cedulaCliente);
+        if (ventas.size() != 0) {
+            Venta ultimaCompraCliente = ventas.get(0);
+            LocalDateTime fechaActualMenosPlazoDias = LocalDateTime.now().minusDays(PLAZO_DIAS);
+            LocalDateTime fechaUltimaCompra = ultimaCompraCliente.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (!fechaActualMenosPlazoDias.isAfter(fechaUltimaCompra)) {
+                throw new BadDataException("No se puede realizar la compra dado a que el cliente tiene compra previa. Y no cumple con el plazo de "+PLAZO_DIAS+" días.");
+            }
         }
     }
 

@@ -5,16 +5,15 @@ import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 
 import java.util.List;
 
-public class ServicioObtenerVentas {
+public class ServicioObtenerVentasPorCliente {
 
     private final RepositorioVenta repositorioVenta;
 
-    public ServicioObtenerVentas(RepositorioVenta repositorioVenta) {
+    public ServicioObtenerVentasPorCliente(RepositorioVenta repositorioVenta) {
         this.repositorioVenta = repositorioVenta;
     }
 
-    public List<Venta> ejecutar() {
-        return this.repositorioVenta.obtenerVentas();
+    public List<Venta> ejecutar(String cedula) {
+        return this.repositorioVenta.obtenerVentasPorCedulaCliente(cedula);
     }
-
 }

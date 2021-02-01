@@ -13,8 +13,6 @@ public class ServicioCrearMoto {
         this.repositorioMoto = repositorioMoto;
     }
 
-    public void ejecutar(Moto moto) {
-        this.repositorioMoto.agregar(moto);
-    }
+    public void ejecutar(Moto moto) { this.repositorioMoto.agregar(moto); }
 
 }
