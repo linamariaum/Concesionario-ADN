@@ -42,9 +42,9 @@ public class ControladorMoto {
         return this.manejadorObtenerMoto.ejecutar(placa);
     }
 
-    @PutMapping("/{id}")
-    public Moto actualizarMoto(@PathVariable(name = "id") int id, @RequestBody ComandoMoto comandoMoto) {
-        return this.manejadorActualizarMoto.ejecutar(id, comandoMoto);
+    @PutMapping("/{placa}")
+    public Moto actualizarMoto(@PathVariable(name = "placa") String placa, @RequestBody ComandoMoto comandoMoto) {
+        return this.manejadorActualizarMoto.ejecutar(placa, comandoMoto);
     }
 
 }
