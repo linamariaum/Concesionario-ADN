@@ -31,10 +31,10 @@ public interface RepositorioMoto {
     /**
      * Permite obtener una moto dada una placa
      *
-     * @param id
+     * @param placa
      * @param moto
      * @return Moto
      */
-    Moto actualizar(int id, Moto moto);
+    Moto actualizar(String placa, Moto moto);
 
 }
