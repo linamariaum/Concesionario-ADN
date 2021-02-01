@@ -20,9 +20,9 @@ public class ManejadorActualizarMoto {
     }
 
     @Transactional
-    public Moto ejecutar(int id, ComandoMoto comandoMoto) {
+    public Moto ejecutar(String placa, ComandoMoto comandoMoto) {
         Moto moto = this.fabricaMoto.crearMoto(comandoMoto);
-        return this.servicioActualizarMoto.ejecutar(id, moto);
+        return this.servicioActualizarMoto.ejecutar(placa, moto);
     }
 }
 

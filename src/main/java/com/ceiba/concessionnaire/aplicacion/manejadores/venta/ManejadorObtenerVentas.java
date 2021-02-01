@@ -17,6 +17,6 @@ public class ManejadorObtenerVentas {
 
     public List<Venta> ejecutar() {
         return this.servicioObtenerVentas.ejecutar();
-        //return this.servicioObtenerVentas.ejecutar(cedulaCliente);
     }
+
 }
