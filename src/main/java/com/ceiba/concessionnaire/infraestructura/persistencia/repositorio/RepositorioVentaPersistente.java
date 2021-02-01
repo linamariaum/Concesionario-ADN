@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class RepositorioVentaPersistente implements RepositorioVenta {
@@ -33,7 +34,7 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     public List<Venta> obtenerVentas() {
         List<VentaEntity> ventaEntities = this.repositorioVentaJPA.findAll();
         if (ventaEntities.size() == 0 ) {
-            throw new DataNotFoundException("No hay motos en la base de datos");
+            throw new DataNotFoundException("No se encontraron ventas.");
         }
         List<Venta> ventas = new ArrayList<Venta>();
         for (VentaEntity ventaEntity: ventaEntities) {
@@ -48,9 +49,8 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
         if (ventaEntity == null) {
             throw new DataNotFoundException("No se encuentra la moto requerida");
         }
-        entityManager.persist(ventaEntity);
-        entityManager.flush();
-        return venta;
+        VentaEntity v = this.repositorioVentaJPA.save(ventaEntity);
+        return VentaBuilder.convertirADominio(v);
     }
 
     @Override
@@ -67,10 +67,10 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     }
 
     private VentaEntity buildVentaEntity(Venta venta) {
-        MotoEntity motoEntityOptional = repositorioMotoJPA.findByPlaca(venta.getMoto().getPlaca());
-        if (motoEntityOptional != null) {
+        Optional<MotoEntity> motoEntityOptional = repositorioMotoJPA.findByPlaca(venta.getMoto().getPlaca());
+        if (motoEntityOptional.isPresent()) {
             VentaEntity ventaEntity = new VentaEntity(venta.getCliente(), venta.getFecha(), venta.getFechaEntrega(), MotoBuilder.convertirAEntity(venta.getMoto()));
-            ventaEntity.setMoto(motoEntityOptional);
+            ventaEntity.setMoto(motoEntityOptional.get());
             ventaEntity.setFecha(venta.getFecha());
             return ventaEntity;
         }

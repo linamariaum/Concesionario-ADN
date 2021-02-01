@@ -17,5 +17,5 @@ public interface RepositorioMotoJPA extends JpaRepository<MotoEntity, Integer> {
      * @return MotoEntity
      */
     @Query("select p from Moto p where p.placa = :placa ")
-    MotoEntity findByPlaca(@Param("placa") String placa);
+    Optional<MotoEntity> findByPlaca(@Param("placa") String placa);
 }

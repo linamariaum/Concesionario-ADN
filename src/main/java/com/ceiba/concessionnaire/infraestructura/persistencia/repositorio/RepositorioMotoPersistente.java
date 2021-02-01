@@ -1,8 +1,10 @@
 package com.ceiba.concessionnaire.infraestructura.persistencia.repositorio;
 
+import com.ceiba.concessionnaire.dominio.exception.BadDataException;
 import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.dominio.exception.DataNotFoundException;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
+import com.ceiba.concessionnaire.infraestructura.error.InternalServerException;
 import com.ceiba.concessionnaire.infraestructura.persistencia.builder.MotoBuilder;
 import com.ceiba.concessionnaire.infraestructura.persistencia.entidad.MotoEntity;
 import com.ceiba.concessionnaire.infraestructura.persistencia.repositorio.jpa.RepositorioMotoJPA;
@@ -29,7 +31,7 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
     @Override
     public List<Moto> obtenerMotos() {
         List<MotoEntity> motosEntities = this.repositorioMotoJPA.findAll();
-        if (motosEntities.size() == 0 ) {
+        if (motosEntities.isEmpty()) {
             throw new DataNotFoundException("No hay motos en la base de datos");
         }
         List<Moto> motos = new ArrayList<Moto>();
@@ -41,37 +43,38 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
 
     @Override
     public Moto obtenerPorPlaca(String placa) {
-        MotoEntity motoEntityOptional = this.repositorioMotoJPA.findByPlaca(placa);
-        if (motoEntityOptional == null) {
-            throw new DataNotFoundException("No se encuentra la moto con la placa ingresada");
+        Optional<MotoEntity> motoEntityOptional = this.repositorioMotoJPA.findByPlaca(placa);
+        if (motoEntityOptional.isPresent()) {
+            return MotoBuilder.convertirADominio(motoEntityOptional.get());
         }
-        return MotoBuilder.convertirADominio(motoEntityOptional);
+        throw new DataNotFoundException("No se encuentra la moto con la placa ingresada");
     }
 
     @Override
     public void agregar(Moto moto) {
-        entityManager.persist(MotoBuilder.convertirAEntity(moto));
-        entityManager.flush();
-    }
-
-    @Override
-    public Moto actualizar(int id, Moto moto) {
-        Optional<MotoEntity> motoEntityOptional = this.repositorioMotoJPA.findById(id);
-        if (motoEntityOptional.isPresent()) {
+        try {
+            Optional<MotoEntity> motoEntityOptional = this.repositorioMotoJPA.findByPlaca(moto.getPlaca());
+            if (motoEntityOptional.isPresent()) {
+                throw new BadDataException("La motocicleta ya existe.");
+            }
             MotoEntity m = this.repositorioMotoJPA.save(MotoBuilder.convertirAEntity(moto));
-            return MotoBuilder.convertirADominio(m);
-        } else {
-            throw new DataNotFoundException("No se encuentra la moto solicitada");
+        } catch (Exception err) {
+            throw new InternalServerException("No se pudo agregar la motocicleta.");
         }
     }
 
-/*    public MotoEntity obtenerMotoEntityPorPlaca(String placa) {
-        this.repositorioMotoJPA.obtenerMotoEntityPorPlaca(placa)
-                .createNamedQuery(MOTO_FIND_BY_PLACA);
-        query.setParameter(PLACA, placa);
+    @Override
+    public Moto actualizar(String placa, Moto moto) {
+        if (placa.equals(moto.getPlaca())) {
+            Optional<MotoEntity> motoEntityOptional = this.repositorioMotoJPA.findByPlaca(placa);
+            if (motoEntityOptional.isPresent()) {
+                MotoEntity motoEntityUpdate = MotoBuilder.convertirAEntity(moto);
+                motoEntityUpdate.setId(motoEntityOptional.get().getId());
+                MotoEntity m = this.repositorioMotoJPA.save(motoEntityUpdate);
+                return MotoBuilder.convertirADominio(m);
+            }
+        }
+        throw new DataNotFoundException("No se encuentra la moto con la placa ingresada");
+    }
 
-        List resultList = query.getResultList();
-
-        return !resultList.isEmpty() ? (MotoEntity) resultList.get(0) : null;
-    }*/
 }
