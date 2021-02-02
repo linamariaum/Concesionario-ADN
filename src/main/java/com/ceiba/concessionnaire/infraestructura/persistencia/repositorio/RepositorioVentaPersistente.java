@@ -12,7 +12,6 @@ import com.ceiba.concessionnaire.infraestructura.persistencia.repositorio.jpa.Re
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +19,11 @@ import java.util.Optional;
 @Repository
 public class RepositorioVentaPersistente implements RepositorioVenta {
 
-    private final EntityManager entityManager;
     @Autowired
     private RepositorioMotoJPA repositorioMotoJPA;
     private final RepositorioVentaJPA repositorioVentaJPA;
 
-    public RepositorioVentaPersistente(EntityManager entityManager, RepositorioVentaJPA repositorioVentaJPA) {
-        this.entityManager = entityManager;
+    public RepositorioVentaPersistente(RepositorioVentaJPA repositorioVentaJPA) {
         this.repositorioVentaJPA = repositorioVentaJPA;
     }
 

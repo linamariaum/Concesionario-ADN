@@ -2,9 +2,9 @@ package com.ceiba.concessionnaire.infraestructura.configuracion;
 
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
-import com.ceiba.concessionnaire.dominio.servicio.asesor.ServicioAsesor;
 import com.ceiba.concessionnaire.dominio.servicio.moto.ServicioObtenerMoto;
 import com.ceiba.concessionnaire.dominio.servicio.moto.ServicioObtenerMotos;
+import com.ceiba.concessionnaire.dominio.servicio.venta.ServicioCrearVenta;
 import com.ceiba.concessionnaire.dominio.servicio.venta.ServicioObtenerVentas;
 import com.ceiba.concessionnaire.dominio.servicio.venta.ServicioObtenerVentasPorCliente;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanServicio {
 
     @Bean
-    public ServicioAsesor servicioAsesor(RepositorioVenta repositorioVenta, RepositorioMoto repositorioMoto) {
-        return new ServicioAsesor(repositorioVenta, repositorioMoto);
+    public ServicioCrearVenta servicioCrearVenta(RepositorioVenta repositorioVenta, RepositorioMoto repositorioMoto) {
+        return new ServicioCrearVenta(repositorioVenta, repositorioMoto);
     }
 
     @Bean

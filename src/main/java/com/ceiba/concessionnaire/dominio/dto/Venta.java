@@ -33,8 +33,4 @@ public class Venta {
     public Date getFechaEntrega() {
         return fechaEntrega;
     }
-
-    public void setFechaEntrega(Date fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
-    }
 }

@@ -1,6 +1,6 @@
 package com.ceiba.concessionnaire.infraestructura.persistencia.repositorio;
 
-import com.ceiba.concessionnaire.dominio.exception.BadDataException;
+import com.ceiba.concessionnaire.dominio.exception.DataDuplicationException;
 import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.dominio.exception.DataNotFoundException;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioMoto;
@@ -11,7 +11,6 @@ import com.ceiba.concessionnaire.infraestructura.persistencia.repositorio.jpa.Re
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,14 +18,10 @@ import java.util.Optional;
 @Repository
 public class RepositorioMotoPersistente implements RepositorioMoto {
 
-    private final EntityManager entityManager;
-
     @Autowired
     private RepositorioMotoJPA repositorioMotoJPA;
 
-    public RepositorioMotoPersistente(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    public RepositorioMotoPersistente() { }
 
     @Override
     public List<Moto> obtenerMotos() {
@@ -55,9 +50,9 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
         try {
             Optional<MotoEntity> motoEntityOptional = this.repositorioMotoJPA.findByPlaca(moto.getPlaca());
             if (motoEntityOptional.isPresent()) {
-                throw new BadDataException("La motocicleta ya existe.");
+                throw new DataDuplicationException("La motocicleta ya existe.");
             }
-            MotoEntity m = this.repositorioMotoJPA.save(MotoBuilder.convertirAEntity(moto));
+            this.repositorioMotoJPA.save(MotoBuilder.convertirAEntity(moto));
         } catch (Exception err) {
             throw new InternalServerException("No se pudo agregar la motocicleta.");
         }
