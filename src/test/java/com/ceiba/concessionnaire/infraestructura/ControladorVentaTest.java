@@ -1,5 +1,7 @@
 package com.ceiba.concessionnaire.infraestructura;
 
+import com.ceiba.concessionnaire.aplicacion.comando.ComandoMoto;
+import com.ceiba.concessionnaire.testdatabuilder.MotoTestDataBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,8 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ControladorVentaTest {
 
-    public static final String PLACA_0 = "DUH43B";
-    public static final String PLACA_1 = "DUH43C";
+    private static final String CLIENTE_EXISTENTE = "1234567890";
+    public static final String PLACA_EXISTENTE_1 = "ADB34D";
+    public static final String PLACA_EXISTENTE_2 = "EFG56H";
+    public static final String PLACA_INEXISTENTE = "QWE89T";
 
     @Autowired
     private MockMvc mvc;
@@ -31,11 +36,48 @@ public class ControladorVentaTest {
     @Test
     public void obtenerVentas() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .get("/ventas")
-                .accept(MediaType.APPLICATION_JSON))
+            .get("/ventas")
+            .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].cliente").value(CLIENTE_EXISTENTE));
     }
 
+    @Test
+    public void obtenerVentasPorCliente() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+            .get("/ventas/{cedulaCliente}", CLIENTE_EXISTENTE)
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].cliente").value(CLIENTE_EXISTENTE));
+    }
+
+    @Test
+    public void crearVenta() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+            .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE_1, "9870654321")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cliente").value("9870654321"));
+    }
+
+    @Test
+    public void crearSegundaVentaSinCumplirPlazoDeDias() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE_2, CLIENTE_EXISTENTE)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se puede realizar la compra dado a que el cliente tiene compra previa. Y no cumple con el plazo de 10 días."));
+    }
+
+    @Test
+    public void crearVentaConPlacaInexistente() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+            .post("/ventas/{placa}/{cedulaCliente}", PLACA_INEXISTENTE, "1234598765")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().is4xxClientError())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se encuentra la moto con la placa ingresada"));;
+    }
 
 }

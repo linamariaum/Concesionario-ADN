@@ -20,12 +20,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile('org.modelmapper:modelmapper:1.1.0')
 	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.10.Final'
+	compile 'log4j:log4j:1.2.17'
 	compile 'org.hibernate:hibernate-core:5.2.9.Final'
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.mockito:mockito-all:1.10.19'
 	testCompile 'junit:junit:4.12'
 }
 
-test {
+/*test {
 	useJUnitPlatform()
-}
+}*/

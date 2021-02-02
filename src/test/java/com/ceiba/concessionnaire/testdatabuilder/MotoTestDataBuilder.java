@@ -55,6 +55,18 @@ public class MotoTestDataBuilder {
     }
 
     public ComandoMoto buildComando() {
-        return new ComandoMoto(this.placa, this.marca, this.modelo, this.color, this. precio);
+        return new ComandoMoto(this.placa, this.marca, this.modelo, this.color, this.precio);
+    }
+
+    public ComandoMoto buildComandoConPlacaInexistente() {
+        return new ComandoMoto("QWE89T", this.marca, this.modelo, this.color, this.precio);
+    }
+
+    public ComandoMoto buildComandoConPlacaErronea() {
+        return new ComandoMoto("45A45V", this.marca, this.modelo, this.color, this.precio);
+    }
+
+    public ComandoMoto buildComandoConPrecioErroneo() {
+        return new ComandoMoto(this.placa, this.marca, this.modelo, this.color, 500);
     }
 }

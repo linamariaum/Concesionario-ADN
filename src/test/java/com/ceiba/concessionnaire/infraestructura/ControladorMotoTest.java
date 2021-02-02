@@ -22,8 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ControladorMotoTest {
 
-    public static final String PLACA_0 = "DUH43B";
-    public static final String PLACA_1 = "DUH43C";
+    public static final String PLACA_YA_CREADA_1 = "ADB34D";
+    public static final String PLACA_YA_CREADA_2 = "EFG56H";
+    public static final String PLACA_CREAR = "DUH43B";
+    public static final String PLACA_INEXISTENTE = "QWE89T";
 
     @Autowired
     private MockMvc mvc;
@@ -34,11 +36,21 @@ public class ControladorMotoTest {
     @Test
     public void obtenerMotoPorPlaca() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-            .get("/motos/{placa}", PLACA_1)
+            .get("/motos/{placa}", PLACA_YA_CREADA_2)
             .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.placa").value(PLACA_1));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.placa").value(PLACA_YA_CREADA_2));
+    }
+
+    @Test
+    public void obtenerMotoPorPlacaInexistente() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .get("/motos/{placa}", PLACA_INEXISTENTE)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se encuentra la moto con la placa ingresada"));
     }
 
     @Test
@@ -61,11 +73,72 @@ public class ControladorMotoTest {
                 .andExpect(status().isOk());
 
         mvc.perform(MockMvcRequestBuilders
-                .get("/motos/{placa}", PLACA_0)
+                .get("/motos/{placa}", PLACA_CREAR)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.placa").value(PLACA_0));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.placa").value(PLACA_CREAR));
+    }
+
+    @Test
+    public void crearMotoRepetida() throws Exception {
+        ComandoMoto comandoMoto = new MotoTestDataBuilder().conPlaca(PLACA_YA_CREADA_1).buildComando();
+        mvc.perform(MockMvcRequestBuilders
+                .post("/motos")
+                .content(objectMapper.writeValueAsString(comandoMoto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se pudo agregar la motocicleta."));
+    }
+
+    @Test
+    public void crearMotoConPlacaInvalida() throws Exception {
+        ComandoMoto comandoMoto = new MotoTestDataBuilder().buildComandoConPlacaErronea();
+        mvc.perform(MockMvcRequestBuilders
+                .post("/motos")
+                .content(objectMapper.writeValueAsString(comandoMoto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("Placa inválida"));
+    }
+
+    @Test
+    public void crearMotoConPrecioInvalido() throws Exception {
+        ComandoMoto comandoMoto = new MotoTestDataBuilder().buildComandoConPrecioErroneo();
+        mvc.perform(MockMvcRequestBuilders
+                .post("/motos")
+                .content(objectMapper.writeValueAsString(comandoMoto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("Precio inválido"));
+    }
+
+    @Test
+    public void actualizarMoto() throws Exception {
+        ComandoMoto comandoMoto = new MotoTestDataBuilder().conPlaca(PLACA_YA_CREADA_2).conColor("MORADO").buildComando();
+        mvc.perform(MockMvcRequestBuilders
+                .put("/motos/{placa}", PLACA_YA_CREADA_2)
+                .content(objectMapper.writeValueAsString(comandoMoto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.placa").value(PLACA_YA_CREADA_2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.color").value("MORADO"));
+    }
+
+    @Test
+    public void actualizarMotoInexistente() throws Exception {
+        ComandoMoto comandoMoto = new MotoTestDataBuilder().buildComandoConPlacaInexistente();
+        mvc.perform(MockMvcRequestBuilders
+                .put("/motos/{placa}", PLACA_INEXISTENTE)
+                .content(objectMapper.writeValueAsString(comandoMoto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se encuentra la moto con la placa ingresada"));
     }
 
 }
