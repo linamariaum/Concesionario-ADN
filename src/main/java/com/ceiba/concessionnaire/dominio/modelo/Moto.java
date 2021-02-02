@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 public class Moto {
 
-    public static final int precioMinimo = 1000;
+    public static final int PRECIO_MINIMO = 1000;
+    private static final String EXPRESION_REGULAR_PLACA = "[A-Z]{3}[0-9]{2}[A-Z]{1}";
 
     private final String placa;
     private final String marca;
@@ -31,11 +32,11 @@ public class Moto {
     }
 
     private boolean validarPrecio(int precio) {
-        return precio >= precioMinimo;
+        return precio >= PRECIO_MINIMO;
     }
 
     private boolean validarPlaca(String placa) {
-        Pattern pattern = Pattern.compile("[A-Z]{3}[0-9]{2}[A-Z]{1}");
+        Pattern pattern = Pattern.compile(EXPRESION_REGULAR_PLACA);
         Matcher matcher = pattern.matcher(placa);
         return matcher.matches();
     }

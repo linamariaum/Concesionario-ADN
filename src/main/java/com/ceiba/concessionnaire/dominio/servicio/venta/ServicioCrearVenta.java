@@ -60,7 +60,7 @@ public class ServicioCrearVenta {
 
     private void validarComprasAnteriores(String cedulaCliente) {
         List<Venta> ventas = this.repositorioVenta.obtenerVentasPorCedulaCliente(cedulaCliente);
-        if (ventas.size() != 0) {
+        if (!ventas.isEmpty()) {
             Venta ultimaCompraCliente = ventas.get(0);
             LocalDateTime fechaActualMenosPlazoDias = LocalDateTime.now().minusDays(PLAZO_DIAS);
             LocalDateTime fechaUltimaCompra = ultimaCompraCliente.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();

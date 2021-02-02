@@ -21,15 +21,13 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
     @Autowired
     private RepositorioMotoJPA repositorioMotoJPA;
 
-    public RepositorioMotoPersistente() { }
-
     @Override
     public List<Moto> obtenerMotos() {
         List<MotoEntity> motosEntities = this.repositorioMotoJPA.findAll();
         if (motosEntities.isEmpty()) {
             throw new DataNotFoundException("No hay motos en la base de datos");
         }
-        List<Moto> motos = new ArrayList<Moto>();
+        List<Moto> motos = new ArrayList<>();
         for (MotoEntity motoEntity: motosEntities) {
             motos.add(MotoBuilder.convertirADominio(motoEntity));
         }
@@ -54,6 +52,7 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
             }
             this.repositorioMotoJPA.save(MotoBuilder.convertirAEntity(moto));
         } catch (Exception err) {
+            String errMessage = err.getMessage();
             throw new InternalServerException("No se pudo agregar la motocicleta.");
         }
     }

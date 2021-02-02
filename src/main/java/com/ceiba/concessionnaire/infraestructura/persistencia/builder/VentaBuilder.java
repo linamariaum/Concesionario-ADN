@@ -5,7 +5,8 @@ import com.ceiba.concessionnaire.infraestructura.persistencia.entidad.VentaEntit
 
 public class VentaBuilder {
 
-    public VentaBuilder() {
+    private VentaBuilder() {
+        throw new IllegalStateException("Clase de traducción");
     }
 
     public static Venta convertirADominio(VentaEntity ventaEntity) {

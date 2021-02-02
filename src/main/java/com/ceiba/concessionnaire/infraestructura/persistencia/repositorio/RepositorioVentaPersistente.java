@@ -30,10 +30,10 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     @Override
     public List<Venta> obtenerVentas() {
         List<VentaEntity> ventaEntities = this.repositorioVentaJPA.findAll();
-        if (ventaEntities.size() == 0 ) {
+        if (ventaEntities.isEmpty()) {
             throw new DataNotFoundException("No se encontraron ventas.");
         }
-        List<Venta> ventas = new ArrayList<Venta>();
+        List<Venta> ventas = new ArrayList<>();
         for (VentaEntity ventaEntity: ventaEntities) {
             ventas.add(VentaBuilder.convertirADominio(ventaEntity));
         }
@@ -53,8 +53,8 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     @Override
     public List<Venta> obtenerVentasPorCedulaCliente(String cedula) {
         List<VentaEntity> ventaEntities = this.repositorioVentaJPA.findAllByCedulaClienteOrderByIdDesc(cedula);
-        List<Venta> ventas = new ArrayList<Venta>();
-        if (ventaEntities.size() == 0) {
+        List<Venta> ventas = new ArrayList<>();
+        if (ventaEntities.isEmpty()) {
             return ventas;
         }
         for (VentaEntity venta: ventaEntities) {
