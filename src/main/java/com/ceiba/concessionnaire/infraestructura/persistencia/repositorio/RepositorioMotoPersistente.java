@@ -52,8 +52,7 @@ public class RepositorioMotoPersistente implements RepositorioMoto {
             }
             this.repositorioMotoJPA.save(MotoBuilder.convertirAEntity(moto));
         } catch (Exception err) {
-            String errMessage = err.getMessage();
-            throw new InternalServerException("No se pudo agregar la motocicleta.");
+            throw new InternalServerException("No se pudo agregar la motocicleta.", err);
         }
     }
 

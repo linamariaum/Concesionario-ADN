@@ -12,14 +12,14 @@ public class Venta {
     private Date fechaEntrega;
 
     public Venta(Date fecha, Moto moto, String cliente, Date fechaEntrega) {
-        this.fecha = fecha;
+        this.fecha = (Date) fecha.clone();
         this.moto = moto;
         this.cedulaCliente = cliente;
-        this.fechaEntrega = fechaEntrega;
+        this.fechaEntrega = (Date) fechaEntrega.clone();
     }
 
     public Date getFecha() {
-        return fecha;
+        return (Date) fecha.clone();
     }
 
     public Moto getMoto() {
@@ -31,6 +31,6 @@ public class Venta {
     }
 
     public Date getFechaEntrega() {
-        return fechaEntrega;
+        return (Date) fechaEntrega.clone();
     }
 }

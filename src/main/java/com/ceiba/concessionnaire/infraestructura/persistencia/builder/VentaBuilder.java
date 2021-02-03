@@ -3,7 +3,7 @@ package com.ceiba.concessionnaire.infraestructura.persistencia.builder;
 import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.infraestructura.persistencia.entidad.VentaEntity;
 
-public class VentaBuilder {
+public final class VentaBuilder {
 
     private VentaBuilder() {
         throw new IllegalStateException("Clase de traducción");

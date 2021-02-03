@@ -27,8 +27,8 @@ public class VentaEntity {
 
     public VentaEntity(String cedulaCliente, Date fecha, Date fechaEntrega, MotoEntity moto) {
         this.cedulaCliente = cedulaCliente;
-        this.fecha = fecha;
-        this.fechaEntrega = fechaEntrega;
+        this.fecha = (Date) fecha.clone();
+        this.fechaEntrega = (Date) fechaEntrega.clone();
         this.moto = moto;
     }
 
@@ -51,11 +51,11 @@ public class VentaEntity {
     }
 
     public Date getFecha() {
-        return fecha;
+        return (Date) fecha.clone();
     }
 
     public void setFecha(Date fecha) {
-        this.fecha = fecha;
+        this.fecha = (Date) fecha.clone();
     }
 
     public MotoEntity getMoto() {
@@ -67,10 +67,10 @@ public class VentaEntity {
     }
 
     public Date getFechaEntrega() {
-        return fechaEntrega;
+        return (Date) fechaEntrega.clone();
     }
 
     public void setFechaEntrega(Date fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
+        this.fechaEntrega = (Date) fechaEntrega.clone();
     }
 }
