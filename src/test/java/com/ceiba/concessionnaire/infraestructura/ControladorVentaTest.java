@@ -1,7 +1,5 @@
 package com.ceiba.concessionnaire.infraestructura;
 
-import com.ceiba.concessionnaire.aplicacion.comando.ComandoMoto;
-import com.ceiba.concessionnaire.testdatabuilder.MotoTestDataBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
