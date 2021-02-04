@@ -79,7 +79,6 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     public MotoEntity actualizarMoto(MotoEntity motoEntity, Moto moto) {
         MotoEntity motoEntityUpdate = MotoBuilder.convertirAEntity(moto);
         motoEntityUpdate.setId(motoEntity.getId());
-        MotoEntity m = this.repositorioMotoJPA.save(motoEntityUpdate);
-        return m;
+        return this.repositorioMotoJPA.save(motoEntityUpdate);
     }
 }
