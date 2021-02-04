@@ -25,12 +25,16 @@ public class MotoEntity {
     @Column(nullable = false)
     private Integer precio;
 
-    public MotoEntity(String placa, String marca, String modelo, String color, Integer precio) {
+    @Column(nullable = false)
+    private boolean disponible;
+
+    public MotoEntity(String placa, String marca, String modelo, String color, Integer precio, boolean disponible) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
         this.color = color;
         this.precio = precio;
+        this.disponible = disponible;
     }
 
     public MotoEntity() {}
@@ -82,4 +86,8 @@ public class MotoEntity {
     public void setPrecio(Integer precio) {
         this.precio = precio;
     }
+
+    public boolean isDisponible() { return disponible; }
+
+    public void setDisponible(boolean disponible) { this.disponible = disponible; }
 }

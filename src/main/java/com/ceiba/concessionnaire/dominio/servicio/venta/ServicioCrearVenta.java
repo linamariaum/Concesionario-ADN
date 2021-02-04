@@ -38,16 +38,17 @@ public class ServicioCrearVenta {
         this.validarComprasAnteriores(cedulaCliente);
 
         Moto moto  = this.repositorioMoto.obtenerPorPlaca(placa);
-        if (moto != null) {
+        if (moto != null && moto.isDisponible()) {
             Date fechaEntrega = this.calcularEntrega(fechaActual);
             if (incremento) {
                 int valorIncremento = ((INCREMENTO_PRECIO*moto.getPrecio())/100);
                 moto.setPrecio( valorIncremento + moto.getPrecio());
             }
+            moto.setDisponible(false);
             Venta venta = new Venta(fechaActual, moto, cedulaCliente, fechaEntrega);
             return this.repositorioVenta.crear(venta);
         }
-        throw new UnsupportedOperationException("No se encuentra la moto ingresada");
+        throw new BadDataException("No se encuentra la moto ingresada o no esta disponible.");
     }
 
     private void diaHabil(Date fecha) {

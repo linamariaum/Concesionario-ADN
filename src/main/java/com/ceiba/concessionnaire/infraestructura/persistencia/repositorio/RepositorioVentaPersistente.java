@@ -2,6 +2,7 @@ package com.ceiba.concessionnaire.infraestructura.persistencia.repositorio;
 
 import com.ceiba.concessionnaire.dominio.dto.Venta;
 import com.ceiba.concessionnaire.dominio.exception.DataNotFoundException;
+import com.ceiba.concessionnaire.dominio.modelo.Moto;
 import com.ceiba.concessionnaire.dominio.repositorio.RepositorioVenta;
 import com.ceiba.concessionnaire.infraestructura.persistencia.builder.MotoBuilder;
 import com.ceiba.concessionnaire.infraestructura.persistencia.builder.VentaBuilder;
@@ -66,11 +67,19 @@ public class RepositorioVentaPersistente implements RepositorioVenta {
     private VentaEntity buildVentaEntity(Venta venta) {
         Optional<MotoEntity> motoEntityOptional = repositorioMotoJPA.findByPlaca(venta.getMoto().getPlaca());
         if (motoEntityOptional.isPresent()) {
-            VentaEntity ventaEntity = new VentaEntity(venta.getCliente(), venta.getFecha(), venta.getFechaEntrega(), MotoBuilder.convertirAEntity(venta.getMoto()));
-            ventaEntity.setMoto(motoEntityOptional.get());
+            MotoEntity motoActualizada = this.actualizarMoto(motoEntityOptional.get(), venta.getMoto());
+            VentaEntity ventaEntity = new VentaEntity(venta.getCliente(), venta.getFecha(), venta.getFechaEntrega(), motoActualizada);
+            ventaEntity.setMoto(motoActualizada);
             ventaEntity.setFecha(venta.getFecha());
             return ventaEntity;
         }
         return null;
+    }
+
+    public MotoEntity actualizarMoto(MotoEntity motoEntity, Moto moto) {
+        MotoEntity motoEntityUpdate = MotoBuilder.convertirAEntity(moto);
+        motoEntityUpdate.setId(motoEntity.getId());
+        MotoEntity m = this.repositorioMotoJPA.save(motoEntityUpdate);
+        return m;
     }
 }

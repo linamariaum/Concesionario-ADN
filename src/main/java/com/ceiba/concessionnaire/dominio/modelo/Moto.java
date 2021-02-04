@@ -15,6 +15,7 @@ public class Moto {
     private final String modelo;
     private String color;
     private int precio;
+    private boolean disponible;
 
     public Moto(String placa, String marca, String modelo, String color, int precio) {
 
@@ -29,6 +30,7 @@ public class Moto {
         this.modelo = modelo;
         this.color = color;
         this.precio = precio;
+        this.disponible = true;
     }
 
     private boolean validarPrecio(int precio) {
@@ -40,6 +42,10 @@ public class Moto {
         Matcher matcher = pattern.matcher(placa);
         return matcher.matches();
     }
+
+    public boolean isDisponible() { return disponible; }
+
+    public void setDisponible(boolean disponible) { this.disponible = disponible; }
 
     public String getPlaca() {
         return placa;

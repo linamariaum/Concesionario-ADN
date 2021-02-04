@@ -13,17 +13,19 @@ public final class MotoBuilder {
         Moto moto = null;
         if (motoEntity != null) {
             moto = new Moto(motoEntity.getPlaca(), motoEntity.getMarca(), motoEntity.getModelo(), motoEntity.getColor(), motoEntity.getPrecio());
+            moto.setDisponible(motoEntity.isDisponible());
         }
         return moto;
     }
 
     public static MotoEntity convertirAEntity(Moto moto) {
-        MotoEntity motoEntity = new MotoEntity(moto.getPlaca(), moto.getMarca(), moto.getModelo(), moto.getColor(), moto.getPrecio());
+        MotoEntity motoEntity = new MotoEntity(moto.getPlaca(), moto.getMarca(), moto.getModelo(), moto.getColor(), moto.getPrecio(), moto.isDisponible());
         motoEntity.setPlaca(moto.getPlaca());
         motoEntity.setMarca(moto.getMarca());
         motoEntity.setModelo(moto.getModelo());
         motoEntity.setColor(moto.getColor());
         motoEntity.setPrecio(moto.getPrecio());
+        motoEntity.setDisponible(moto.isDisponible());
         return motoEntity;
     }
 
