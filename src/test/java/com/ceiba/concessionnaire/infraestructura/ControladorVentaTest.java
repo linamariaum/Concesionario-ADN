@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ControladorVentaTest {
 
     private static final String CLIENTE_EXISTENTE = "1234567890";
-    public static final String PLACA_EXISTENTE_1 = "ADB34D";
-    public static final String PLACA_EXISTENTE_2 = "EFG56H";
+    public static final String PLACA_VENDIDA = "ADB34D";
+    public static final String PLACA_EXISTENTE = "EFG56H";
     public static final String PLACA_INEXISTENTE = "QWE89T";
 
     @Autowired
@@ -56,7 +56,7 @@ public class ControladorVentaTest {
     @Test
     public void crearVenta() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-            .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE_1, "9870654321")
+            .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE, "9870654321")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.cliente").value("9870654321"));
@@ -65,10 +65,19 @@ public class ControladorVentaTest {
     @Test
     public void crearSegundaVentaSinCumplirPlazoDeDias() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE_2, CLIENTE_EXISTENTE)
+                .post("/ventas/{placa}/{cedulaCliente}", PLACA_EXISTENTE, CLIENTE_EXISTENTE)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se puede realizar la compra dado a que el cliente tiene compra previa. Y no cumple con el plazo de 10 días."));
+    }
+
+    @Test
+    public void crearVentaAPlacaYaVendida() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .post("/ventas/{placa}/{cedulaCliente}", PLACA_VENDIDA, "2634567894")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensaje").value("No se encuentra la moto ingresada o no esta disponible."));
     }
 
     @Test
